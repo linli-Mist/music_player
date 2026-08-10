@@ -26,6 +26,8 @@
 #include <sys/stat.h>
 #include <unistd.h>
 #include <cstdio>
+#include <cerrno>
+#include <cstring>
 
 MainWindow::MainWindow(QWidget *parent)
     : QWidget(parent)
@@ -636,13 +638,16 @@ QWidget* MainWindow::createPlayerPage()
     funcLayout->addWidget(eqBtn);
     funcLayout->addWidget(playlistBtn);
 
-    // 音量弹出面板（竖向布局）
+    // 音量弹出面板（竖向布局）- 放在音量按钮正上方
     volumePopup = new QWidget(playerPage);
     volumePopup->setFixedSize(60, 200);
     volumePopup->setVisible(false);
     volumePopup->setStyleSheet("QWidget { background: rgba(15,15,20,240);"
         "border: 1px solid rgba(255,255,255,30); border-radius: 12px; }");
-    volumePopup->move(950, 300); // 在音量按钮上方弹出
+    // 音量按钮绝对位置: x=618, y=545 (playerBar y=520 + 按钮 y=25)
+    // 面板中心对齐按钮中心: x=618+16-30=604
+    // 面板底部紧贴按钮上方: y=545-200-5=340
+    volumePopup->move(604, 340);
 
     QVBoxLayout *volPopupLayout = new QVBoxLayout(volumePopup);
     volPopupLayout->setContentsMargins(10, 12, 10, 12);
@@ -670,6 +675,7 @@ QWidget* MainWindow::createPlayerPage()
     volumeSlider->setRange(0, 100);
     volumeSlider->setValue(75);
     volumeSlider->setMinimumSize(28, 120);
+    volumeSlider->setInvertedAppearance(true);  // 最下面是0%，最上面是100%
     volumeSlider->setStyleSheet(
         "QSlider::groove:vertical { width: 4px; background: rgba(255,255,255,30); border-radius: 2px; }"
         "QSlider::handle:vertical { background: #31C27C; width: 14px; height: 14px; margin: 0 -5px; border-radius: 7px; }"
@@ -751,11 +757,12 @@ QWidget* MainWindow::createSettingsPage()
     QSlider *volSlider = new QSlider(Qt::Horizontal, volRow);
     volSlider->setRange(0, 100);
     volSlider->setValue(volumeSlider ? volumeSlider->value() : 75);
-    volSlider->setMinimumSize(80, 28);
+    volSlider->setMinimumSize(200, 30);
+    volSlider->setTracking(true);
     volSlider->setStyleSheet(
-        "QSlider::groove:horizontal { height: 6px; background: rgba(255,255,255,30); border-radius: 3px; }"
-        "QSlider::handle:horizontal { background: #31C27C; width: 18px; height: 18px; margin: -6px 0; border-radius: 9px; }"
-        "QSlider::sub-page:horizontal { background: #31C27C; border-radius: 3px; }");
+        "QSlider::groove:horizontal { height: 8px; background: rgba(255,255,255,30); border-radius: 4px; }"
+        "QSlider::handle:horizontal { background: #31C27C; width: 24px; height: 24px; margin: -8px 0; border-radius: 12px; }"
+        "QSlider::sub-page:horizontal { background: #31C27C; border-radius: 4px; }");
     connect(volSlider, &QSlider::valueChanged, [this](int val) { setVolume(val); });
     volLayout->addWidget(volLabel);
     volLayout->addWidget(volSlider, 1);
@@ -797,15 +804,23 @@ QWidget* MainWindow::createSettingsPage()
 // ============ mplayer ============
 void MainWindow::initMplayer()
 {
-    // 先删除旧的有名管道，避免权限问题
     QString appDir = QStringLiteral("/home/edu/work/Project/project02/music_player");
     QString fifoPath = appDir + "/fifo_cmd";
-    unlink(fifoPath.toUtf8().constData());
+
+    qDebug() << "Initializing mplayer...";
+    qDebug() << "FIFO path:" << fifoPath;
+
+    // 先删除旧的有名管道，避免权限问题
+    if (unlink(fifoPath.toUtf8().constData()) == 0) {
+        qDebug() << "Removed old FIFO";
+    }
 
     // 创建新的有名管道
     if (mkfifo(fifoPath.toUtf8().constData(), 0666) == -1) {
-        qDebug() << "mkfifo failed or already exists";
+        qDebug() << "mkfifo failed:" << strerror(errno);
+        return;
     }
+    qDebug() << "Created new FIFO";
 
     mplayerProcess = new QProcess(this);
     mplayerProcess->setProcessChannelMode(QProcess::MergedChannels);
@@ -813,14 +828,16 @@ void MainWindow::initMplayer()
     QStringList arguments;
     arguments << "-slave" << "-quiet" << "-idle"
               << "-input" << ("file=" + fifoPath);
+    qDebug() << "Starting mplayer with args:" << arguments;
     mplayerProcess->start("mplayer", arguments);
 
     if (!mplayerProcess->waitForStarted(3000)) {
         qDebug() << "Failed to start mplayer!";
-        songTitleLabel->setText("mplayer启动失败");
+        if (songTitleLabel) songTitleLabel->setText("mplayer启动失败");
         return;
     }
 
+    qDebug() << "mplayer started successfully, PID:" << mplayerProcess->processId();
     connect(mplayerProcess, &QProcess::readyReadStandardOutput,
             this, &MainWindow::readMplayerOutput);
 }
@@ -885,6 +902,7 @@ void MainWindow::onSongFinished()
 // ============ 歌曲管理 ============
 void MainWindow::readSongMeta(const QString &filePath, QString &title, QString &artist)
 {
+    // 直接使用文件名作为标题，避免复杂的 ID3 解析导致问题
     title = QFileInfo(filePath).completeBaseName();
     artist = "未知歌手";
 
@@ -900,76 +918,10 @@ void MainWindow::readSongMeta(const QString &filePath, QString &title, QString &
             QString a = QString::fromLocal8Bit(tag.mid(33, 30)).trimmed();
             if (!t.isEmpty()) title = t;
             if (!a.isEmpty()) artist = a;
-            file.close();
-            return;
-        }
-    }
-
-    // 尝试 ID3v2（文件开头）
-    file.seek(0);
-    QByteArray header = file.read(10);
-    if (header.left(3) == "ID3") {
-        int majorVer = (unsigned char)header[3];
-        int size = ((header[6] & 0x7F) << 21) |
-                   ((header[7] & 0x7F) << 14) |
-                   ((header[8] & 0x7F) << 7) |
-                   (header[9] & 0x7F);
-
-        QByteArray id3data = file.read(size);
-        int pos = 0;
-        bool foundTitle = false, foundArtist = false;
-
-        while (pos + 10 <= id3data.size() && (!foundTitle || !foundArtist)) {
-            QByteArray frameId = id3data.mid(pos, 4);
-            if (frameId[0] == 0) break; // padding
-
-            int frameSize;
-            if (majorVer >= 4) { // ID3v2.4 uses syncsafe integers
-                frameSize = ((unsigned char)id3data[pos+4] << 21) |
-                           ((unsigned char)id3data[pos+5] << 14) |
-                           ((unsigned char)id3data[pos+6] << 7) |
-                           (unsigned char)id3data[pos+7];
-            } else {
-                frameSize = ((unsigned char)id3data[pos+4] << 24) |
-                           ((unsigned char)id3data[pos+5] << 16) |
-                           ((unsigned char)id3data[pos+6] << 8) |
-                           (unsigned char)id3data[pos+7];
-            }
-
-            if (frameSize <= 0 || pos + 10 + frameSize > id3data.size()) break;
-
-            QByteArray frameData = id3data.mid(pos + 10, frameSize);
-
-            auto parseTextFrame = [](const QByteArray &data) -> QString {
-                if (data.size() <= 1) return "";
-                char encoding = data[0];
-                QByteArray textData = data.mid(1);
-                // 移除末尾的 null 字节
-                while (textData.size() > 0 && textData.back() == 0)
-                    textData.chop(1);
-
-                if (encoding == 0) return QString::fromLatin1(textData).trimmed();
-                if (encoding == 3) return QString::fromUtf8(textData).trimmed();
-                // encoding 1/2 = UTF-16
-                return QString::fromUtf8(textData).trimmed();
-            };
-
-            if (frameId == "TIT2" && !foundTitle) {
-                title = parseTextFrame(frameData);
-                if (!title.isEmpty()) foundTitle = true;
-            } else if (frameId == "TPE1" && !foundArtist) {
-                artist = parseTextFrame(frameData);
-                if (!artist.isEmpty()) foundArtist = true;
-            }
-
-            pos += 10 + frameSize;
         }
     }
 
     file.close();
-
-    if (title.isEmpty()) title = QFileInfo(filePath).completeBaseName();
-    if (artist.isEmpty()) artist = "未知歌手";
 }
 
 void MainWindow::scanSongs()
@@ -978,13 +930,20 @@ void MainWindow::scanSongs()
     songNames.clear();
     songTitles.clear();
     songArtists.clear();
-    QDir dir(QStringLiteral("/home/edu/work/Project/project02/music_player") + "/song");
 
-    if (!dir.exists()) return;
+    QString songDir = QStringLiteral("/home/edu/work/Project/project02/music_player") + "/song";
+    QDir dir(songDir);
+    qDebug() << "Scanning songs in:" << songDir << "Exists:" << dir.exists();
+
+    if (!dir.exists()) {
+        qDebug() << "Song directory not found!";
+        return;
+    }
 
     QStringList filters;
     filters << "*.mp3" << "*.wav";
     QFileInfoList fileList = dir.entryInfoList(filters, QDir::Files);
+    qDebug() << "Found" << fileList.size() << "audio files";
 
     for (const QFileInfo &fi : fileList) {
         songList.append(fi.absoluteFilePath());
@@ -995,6 +954,8 @@ void MainWindow::scanSongs()
         readSongMeta(fi.absoluteFilePath(), title, artist);
         songTitles.append(title);
         songArtists.append(artist);
+
+        qDebug() << "Song:" << title << "-" << artist << "(" << fi.fileName() << ")";
     }
 
     // 更新歌曲列表页
@@ -1002,6 +963,25 @@ void MainWindow::scanSongs()
         songsListWidget->clear();
         for (int i = 0; i < songTitles.size(); i++) {
             songsListWidget->addItem(songTitles[i] + " - " + songArtists[i]);
+        }
+    }
+
+    // 更新播放列表
+    if (playlistList) {
+        playlistList->clear();
+        for (int i = 0; i < songTitles.size(); i++) {
+            QString prefix = favorites.contains(songNames[i]) ? "♥ " : "";
+            playlistList->addItem(prefix + songTitles[i] + " - " + songArtists[i]);
+        }
+        if (currentSongIndex >= 0 && currentSongIndex < songList.size()) {
+            playlistList->setCurrentRow(currentSongIndex);
+        }
+    }
+
+    // 更新首页
+    if (homeNowPlaying && !songTitles.isEmpty()) {
+        if (currentSongIndex >= 0 && currentSongIndex < songTitles.size()) {
+            homeNowPlaying->setText(songTitles[currentSongIndex]);
         }
     }
 }
@@ -1329,10 +1309,20 @@ void MainWindow::saveConfig()
 
 void MainWindow::sendCommand(const QString &cmd)
 {
-    if (!mplayerProcess || mplayerProcess->state() == QProcess::NotRunning) return;
+    if (!mplayerProcess || mplayerProcess->state() == QProcess::NotRunning) {
+        qDebug() << "Cannot send command - mplayer not running";
+        return;
+    }
     QString fifoPath = QStringLiteral("/home/edu/work/Project/project02/music_player") + "/fifo_cmd";
     FILE *fifo = fopen(fifoPath.toUtf8().constData(), "w");
-    if (fifo) { fprintf(fifo, "%s\n", cmd.toUtf8().constData()); fflush(fifo); fclose(fifo); }
+    if (fifo) {
+        fprintf(fifo, "%s\n", cmd.toUtf8().constData());
+        fflush(fifo);
+        fclose(fifo);
+        qDebug() << "Sent command:" << cmd;
+    } else {
+        qDebug() << "Failed to open FIFO for writing:" << strerror(errno);
+    }
 }
 
 void MainWindow::sendLoadFile(const QString &path)
