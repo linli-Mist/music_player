@@ -21,3 +21,6 @@ qrc_*.cpp
 # 文档
 DELIVERY_REPORT.md
 PROJECT_SUMMARY.md
+
+# 歌曲文件夹
+song/
