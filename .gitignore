@@ -1,0 +1,23 @@
+# 编译产物
+*.o
+*.exe
+*.stash
+Makefile*
+release/
+debug/
+*.Debug
+*.Release
+
+# Qt 生成文件
+ui_*.h
+moc_*.cpp
+moc_*.h
+qrc_*.cpp
+
+# IDE 文件
+*.pro.user
+*.pro.user.*
+
+# 文档
+DELIVERY_REPORT.md
+PROJECT_SUMMARY.md

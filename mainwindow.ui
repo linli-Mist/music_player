@@ -1,0 +1,1361 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QWidget" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1024</width>
+    <height>600</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Music Player</string>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>1024</width>
+    <height>600</height>
+   </size>
+  </property>
+  <property name="maximumSize">
+   <size>
+    <width>1024</width>
+    <height>600</height>
+   </size>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">QWidget#MainWindow { background: #0a1628; }</string>
+  </property>
+  <layout class="QVBoxLayout" name="mainLayout">
+   <property name="spacing">
+    <number>0</number>
+   </property>
+   <property name="leftMargin">
+    <number>0</number>
+   </property>
+   <property name="topMargin">
+    <number>0</number>
+   </property>
+   <property name="rightMargin">
+    <number>0</number>
+   </property>
+   <property name="bottomMargin">
+    <number>0</number>
+   </property>
+   <item>
+    <widget class="QStackedWidget" name="stackedWidget">
+     <property name="currentIndex">
+      <number>0</number>
+     </property>
+     <!-- Page 0: 首页 -->
+     <widget class="QWidget" name="homePage">
+      <property name="styleSheet">
+       <string notr="true">background: qlineargradient(x1:0,y1:0,x2:0.5,y2:1,stop:0 #0a1628, stop:0.3 #0d2137, stop:0.7 #122a3e, stop:1 #0f2530);</string>
+      </property>
+      <layout class="QVBoxLayout" name="homeLayout">
+       <property name="spacing">
+        <number>0</number>
+       </property>
+       <property name="leftMargin">
+        <number>30</number>
+       </property>
+       <property name="topMargin">
+        <number>20</number>
+       </property>
+       <property name="rightMargin">
+        <number>30</number>
+       </property>
+       <property name="bottomMargin">
+        <number>10</number>
+       </property>
+       <item>
+        <widget class="QLabel" name="greetingLabel">
+         <property name="text">
+          <string>早上好 ☀️</string>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">color: white; font-size: 22px; font-weight: bold;</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <spacer name="homeSpacer1">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeType">
+          <enum>QSizePolicy::Fixed</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>16</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <!-- 当前播放卡片 -->
+       <item>
+        <widget class="QWidget" name="cardWidget">
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>80</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>16777215</width>
+           <height>80</height>
+          </size>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">background: rgba(255,255,255,10); border-radius: 12px;</string>
+         </property>
+         <layout class="QHBoxLayout" name="cardLayout">
+          <property name="leftMargin">
+           <number>16</number>
+          </property>
+          <property name="topMargin">
+           <number>12</number>
+          </property>
+          <property name="rightMargin">
+           <number>16</number>
+          </property>
+          <property name="bottomMargin">
+           <number>12</number>
+          </property>
+          <item>
+           <widget class="QLabel" name="cardIcon">
+            <property name="minimumSize">
+             <size>
+              <width>56</width>
+              <height>56</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>56</width>
+              <height>56</height>
+             </size>
+            </property>
+            <property name="text">
+             <string>♪</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">background: qlineargradient(x1:0,y1:0,x2:1,y2:1,stop:0 #2d6b4f,stop:1 #1a4a3a); border-radius: 8px; font-size: 20px; color: rgba(255,255,255,30);</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <layout class="QVBoxLayout" name="cardInfoLayout">
+            <item>
+             <widget class="QLabel" name="homeNowPlaying">
+              <property name="text">
+               <string>未播放</string>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">color: white; font-size: 15px; font-weight: bold;</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="cardSubLabel">
+              <property name="text">
+               <string>点击播放按钮开始</string>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">color: rgba(255,255,255,80); font-size: 12px;</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <widget class="QPushButton" name="cardPlayBtn">
+            <property name="minimumSize">
+             <size>
+              <width>48</width>
+              <height>48</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>48</width>
+              <height>48</height>
+             </size>
+            </property>
+            <property name="text">
+             <string>播放</string>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">QPushButton { background: #31C27C; border-radius: 24px; color: white; font-size: 14px; font-weight: bold; } QPushButton:pressed { background: #269e65; }</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <spacer name="homeSpacer2">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeType">
+          <enum>QSizePolicy::Fixed</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>16</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <!-- 功能快捷入口容器 -->
+       <item>
+        <widget class="QWidget" name="quickRow">
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>70</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>16777215</width>
+           <height>70</height>
+          </size>
+         </property>
+         <layout class="QHBoxLayout" name="quickLayout">
+          <property name="spacing">
+           <number>12</number>
+          </property>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <spacer name="homeSpacer3">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeType">
+          <enum>QSizePolicy::Fixed</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>16</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <!-- 每日推荐 -->
+       <item>
+        <widget class="QLabel" name="recommendTitleLabel">
+         <property name="text">
+          <string>每日推荐</string>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">color: white; font-size: 16px; font-weight: bold;</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <spacer name="homeSpacer4">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeType">
+          <enum>QSizePolicy::Fixed</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>8</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item>
+        <widget class="QWidget" name="recommendGrid">
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>140</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>16777215</width>
+           <height>140</height>
+          </size>
+         </property>
+         <layout class="QHBoxLayout" name="recGridLayout">
+          <property name="spacing">
+           <number>12</number>
+          </property>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <spacer name="homeSpacer5">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeType">
+          <enum>QSizePolicy::Fixed</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>16</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <!-- 最近播放 -->
+       <item>
+        <widget class="QLabel" name="recentTitleLabel">
+         <property name="text">
+          <string>最近播放</string>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">color: white; font-size: 16px; font-weight: bold;</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <spacer name="homeSpacer6">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeType">
+          <enum>QSizePolicy::Fixed</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>8</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item>
+        <widget class="QWidget" name="recentGrid">
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>140</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>16777215</width>
+           <height>140</height>
+          </size>
+         </property>
+         <layout class="QHBoxLayout" name="recentGridLayout">
+          <property name="spacing">
+           <number>12</number>
+          </property>
+         </layout>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <!-- Page 1: 歌曲列表页 -->
+     <widget class="QWidget" name="songsPage">
+      <property name="styleSheet">
+       <string notr="true">background: qlineargradient(x1:0,y1:0,x2:0.5,y2:1,stop:0 #0a1628, stop:0.3 #0d2137, stop:0.7 #122a3e, stop:1 #0f2530);</string>
+      </property>
+      <layout class="QVBoxLayout" name="songsLayout">
+       <property name="spacing">
+        <number>0</number>
+       </property>
+       <property name="leftMargin">
+        <number>20</number>
+       </property>
+       <property name="topMargin">
+        <number>16</number>
+       </property>
+       <property name="rightMargin">
+        <number>20</number>
+       </property>
+       <property name="bottomMargin">
+        <number>8</number>
+       </property>
+       <item>
+        <widget class="QLineEdit" name="searchEdit">
+         <property name="placeholderText">
+          <string>搜索歌曲...</string>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>40</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>16777215</width>
+           <height>40</height>
+          </size>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QLineEdit { background: rgba(255,255,255,10); border: 1px solid rgba(255,255,255,20); border-radius: 20px; color: white; padding: 0 16px; font-size: 14px; } QLineEdit:focus { border-color: #31C27C; }</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <spacer name="songsSpacer1">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeType">
+          <enum>QSizePolicy::Fixed</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>8</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <!-- 排序按钮栏 -->
+       <item>
+        <widget class="QWidget" name="sortBar">
+         <property name="styleSheet">
+          <string notr="true">background: transparent;</string>
+         </property>
+         <layout class="QHBoxLayout" name="sortLayout">
+          <property name="spacing">
+           <number>8</number>
+          </property>
+          <property name="leftMargin">
+           <number>0</number>
+          </property>
+          <property name="topMargin">
+           <number>0</number>
+          </property>
+          <property name="rightMargin">
+           <number>0</number>
+          </property>
+          <property name="bottomMargin">
+           <number>0</number>
+          </property>
+          <item>
+           <widget class="QLabel" name="sortLabel">
+            <property name="text">
+             <string>排序:</string>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">color: rgba(255,255,255,100); font-size: 12px;</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="sortDefaultBtn">
+            <property name="text">
+             <string>默认</string>
+            </property>
+            <property name="checkable">
+             <bool>true</bool>
+            </property>
+            <property name="checked">
+             <bool>true</bool>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">QPushButton { background: transparent; border: 1px solid rgba(255,255,255,30); border-radius: 12px; color: rgba(255,255,255,120); font-size: 11px; padding: 4px 12px; } QPushButton:checked { background: rgba(49,194,124,40); border-color: #31C27C; color: #31C27C; }</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="sortNameBtn">
+            <property name="text">
+             <string>名称</string>
+            </property>
+            <property name="checkable">
+             <bool>true</bool>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">QPushButton { background: transparent; border: 1px solid rgba(255,255,255,30); border-radius: 12px; color: rgba(255,255,255,120); font-size: 11px; padding: 4px 12px; } QPushButton:checked { background: rgba(49,194,124,40); border-color: #31C27C; color: #31C27C; }</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="sortArtistBtn">
+            <property name="text">
+             <string>歌手</string>
+            </property>
+            <property name="checkable">
+             <bool>true</bool>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">QPushButton { background: transparent; border: 1px solid rgba(255,255,255,30); border-radius: 12px; color: rgba(255,255,255,120); font-size: 11px; padding: 4px 12px; } QPushButton:checked { background: rgba(49,194,124,40); border-color: #31C27C; color: #31C27C; }</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="sortRecentBtn">
+            <property name="text">
+             <string>最近</string>
+            </property>
+            <property name="checkable">
+             <bool>true</bool>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">QPushButton { background: transparent; border: 1px solid rgba(255,255,255,30); border-radius: 12px; color: rgba(255,255,255,120); font-size: 11px; padding: 4px 12px; } QPushButton:checked { background: rgba(49,194,124,40); border-color: #31C27C; color: #31C27C; }</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="sortCountBtn">
+            <property name="text">
+             <string>最热</string>
+            </property>
+            <property name="checkable">
+             <bool>true</bool>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">QPushButton { background: transparent; border: 1px solid rgba(255,255,255,30); border-radius: 12px; color: rgba(255,255,255,120); font-size: 11px; padding: 4px 12px; } QPushButton:checked { background: rgba(49,194,124,40); border-color: #31C27C; color: #31C27C; }</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <spacer name="sortSpacer">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <spacer name="songsSpacer2">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeType">
+          <enum>QSizePolicy::Fixed</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>4</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item>
+        <widget class="QListWidget" name="songsListWidget">
+         <property name="styleSheet">
+          <string notr="true">QListWidget { background: transparent; border: none; color: rgba(255,255,255,200); } QListWidget::item { padding: 14px 16px; border-bottom: 1px solid rgba(255,255,255,8); font-size: 14px; } QListWidget::item:selected { background: rgba(49,194,124,30); color: #31C27C; } QListWidget::item:hover { background: rgba(255,255,255,10); }</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <!-- Page 2: 收藏页 -->
+     <widget class="QWidget" name="favoritesPage">
+      <property name="styleSheet">
+       <string notr="true">background: qlineargradient(x1:0,y1:0,x2:0.5,y2:1,stop:0 #0a1628, stop:0.3 #0d2137, stop:0.7 #122a3e, stop:1 #0f2530);</string>
+      </property>
+      <layout class="QVBoxLayout" name="favLayout">
+       <property name="spacing">
+        <number>0</number>
+       </property>
+       <property name="leftMargin">
+        <number>20</number>
+       </property>
+       <property name="topMargin">
+        <number>16</number>
+       </property>
+       <property name="rightMargin">
+        <number>20</number>
+       </property>
+       <property name="bottomMargin">
+        <number>8</number>
+       </property>
+       <item>
+        <layout class="QHBoxLayout" name="favHeaderLayout">
+         <item>
+          <widget class="QLabel" name="favTitle">
+           <property name="text">
+            <string>我的收藏</string>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">color: white; font-size: 20px; font-weight: bold;</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <spacer name="favHeaderSpacer">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item>
+          <widget class="QPushButton" name="playAllBtn">
+           <property name="minimumSize">
+            <size>
+             <width>80</width>
+             <height>32</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>80</width>
+             <height>32</height>
+            </size>
+           </property>
+           <property name="text">
+            <string>播放全部</string>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">QPushButton { background: #31C27C; border-radius: 16px; color: white; font-size: 12px; } QPushButton:pressed { background: #269e65; }</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <spacer name="favSpacer1">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeType">
+          <enum>QSizePolicy::Fixed</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>8</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item>
+        <widget class="QListWidget" name="favoritesListWidget">
+         <property name="styleSheet">
+          <string notr="true">QListWidget { background: transparent; border: none; color: rgba(255,255,255,200); } QListWidget::item { padding: 14px 16px; border-bottom: 1px solid rgba(255,255,255,8); font-size: 14px; } QListWidget::item:selected { background: rgba(231,76,60,30); color: #e74c3c; } QListWidget::item:hover { background: rgba(255,255,255,10); }</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <!-- Page 3: 播放页 -->
+     <widget class="QWidget" name="playerPage">
+      <property name="styleSheet">
+       <string notr="true">background: qlineargradient(x1:0,y1:0,x2:0.5,y2:1,stop:0 #0a1628, stop:0.3 #0d2137, stop:0.7 #122a3e, stop:1 #0f2530);</string>
+      </property>
+      <layout class="QVBoxLayout" name="playerMainLayout">
+       <property name="spacing">
+        <number>0</number>
+       </property>
+       <property name="leftMargin">
+        <number>0</number>
+       </property>
+       <property name="topMargin">
+        <number>0</number>
+       </property>
+       <property name="rightMargin">
+        <number>0</number>
+       </property>
+       <property name="bottomMargin">
+        <number>0</number>
+       </property>
+       <!-- 内容区 -->
+       <item>
+        <widget class="QWidget" name="contentWidget">
+         <layout class="QHBoxLayout" name="contentLayout">
+          <property name="spacing">
+           <number>30</number>
+          </property>
+          <property name="leftMargin">
+           <number>40</number>
+          </property>
+          <property name="topMargin">
+           <number>30</number>
+          </property>
+          <property name="rightMargin">
+           <number>40</number>
+          </property>
+          <property name="bottomMargin">
+           <number>0</number>
+          </property>
+          <!-- 左侧封面: RotatingCover (提升控件) -->
+          <item>
+           <widget class="RotatingCover" name="coverLabel">
+            <property name="minimumSize">
+             <size>
+              <width>300</width>
+              <height>300</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>300</width>
+              <height>300</height>
+             </size>
+            </property>
+           </widget>
+          </item>
+          <!-- 右侧信息+歌词 -->
+          <item>
+           <widget class="QWidget" name="infoPanel">
+            <layout class="QVBoxLayout" name="infoLayout">
+             <property name="spacing">
+              <number>0</number>
+             </property>
+             <property name="leftMargin">
+              <number>0</number>
+             </property>
+             <property name="topMargin">
+              <number>10</number>
+             </property>
+             <property name="rightMargin">
+              <number>0</number>
+             </property>
+             <property name="bottomMargin">
+              <number>0</number>
+             </property>
+             <item>
+              <widget class="QLabel" name="songTitleLabel">
+               <property name="text">
+                <string>未播放</string>
+               </property>
+               <property name="styleSheet">
+                <string notr="true">color: white; font-weight: bold; font-size: 24px;</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLabel" name="songArtistLabel">
+               <property name="text">
+                <string/>
+               </property>
+               <property name="styleSheet">
+                <string notr="true">color: rgba(255,255,255,130); font-size: 14px;</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QListWidget" name="lyricsList">
+               <property name="verticalScrollBarPolicy">
+                <enum>Qt::ScrollBarAlwaysOff</enum>
+               </property>
+               <property name="horizontalScrollBarPolicy">
+                <enum>Qt::ScrollBarAlwaysOff</enum>
+               </property>
+               <property name="styleSheet">
+                <string notr="true">QListWidget { background: transparent; border: none; color: rgba(255,255,255,40); } QListWidget::item { padding: 10px 12px; border: none; } QListWidget::item:selected { background: transparent; }</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <!-- 底部控制栏 -->
+       <item>
+        <widget class="QWidget" name="playerBar">
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>80</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>16777215</width>
+           <height>80</height>
+          </size>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">background: rgba(0,0,0,200); border-top: 1px solid rgba(255,255,255,10);</string>
+         </property>
+         <layout class="QHBoxLayout" name="barLayout">
+          <property name="spacing">
+           <number>0</number>
+          </property>
+          <property name="leftMargin">
+           <number>16</number>
+          </property>
+          <property name="topMargin">
+           <number>8</number>
+          </property>
+          <property name="rightMargin">
+           <number>16</number>
+          </property>
+          <property name="bottomMargin">
+           <number>4</number>
+          </property>
+          <!-- 左侧：缩略图 + 歌名 + 收藏 -->
+          <item>
+           <widget class="QLabel" name="barThumbLabel">
+            <property name="minimumSize">
+             <size>
+              <width>44</width>
+              <height>44</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>44</width>
+              <height>44</height>
+             </size>
+            </property>
+            <property name="text">
+             <string>乐</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">background: qlineargradient(x1:0,y1:0,x2:1,y2:1,stop:0 #2d6b4f, stop:1 #1a4a3a); border-radius: 6px; font-size: 16px; color: rgba(255,255,255,80);</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <layout class="QVBoxLayout" name="barInfoLayout">
+            <item>
+             <widget class="QLabel" name="barNameLabel">
+              <property name="text">
+               <string>未播放</string>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">color: rgba(255,255,255,230); font-size: 13px;</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="barArtistLabel">
+              <property name="text">
+               <string/>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">color: rgba(255,255,255,100); font-size: 11px;</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <widget class="QPushButton" name="likeBtn">
+            <property name="minimumSize">
+             <size>
+              <width>40</width>
+              <height>40</height>
+             </size>
+            </property>
+            <property name="text">
+             <string>♥</string>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">QPushButton { background: transparent; border: none; color: rgba(255,255,255,80); font-size: 20px; padding: 6px; } QPushButton:pressed { color: #e74c3c; }</string>
+            </property>
+           </widget>
+          </item>
+          <!-- 中间控制区 -->
+          <item>
+           <layout class="QVBoxLayout" name="centerLayout">
+            <item>
+             <layout class="QHBoxLayout" name="ctrlLayout">
+              <property name="spacing">
+               <number>18</number>
+              </property>
+              <item>
+               <widget class="QPushButton" name="loopBtn">
+                <property name="minimumSize">
+                 <size>
+                  <width>64</width>
+                  <height>48</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>列表循环</string>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true">QPushButton { background: transparent; border: none; color: rgba(255,255,255,160); font-size: 18px; padding: 8px; } QPushButton:pressed { color: white; }</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QPushButton" name="prevBtn">
+                <property name="minimumSize">
+                 <size>
+                  <width>48</width>
+                  <height>48</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>上一曲</string>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true">QPushButton { background: transparent; border: none; color: rgba(255,255,255,160); font-size: 18px; padding: 8px; } QPushButton:pressed { color: white; }</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QPushButton" name="playBtn">
+                <property name="minimumSize">
+                 <size>
+                  <width>44</width>
+                  <height>44</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>44</width>
+                  <height>44</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>播放</string>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true">QPushButton { background: #31C27C; border-radius: 22px; color: white; font-size: 16px; font-weight: bold; } QPushButton:pressed { background: #269e65; }</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QPushButton" name="nextBtn">
+                <property name="minimumSize">
+                 <size>
+                  <width>48</width>
+                  <height>48</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>下一曲</string>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true">QPushButton { background: transparent; border: none; color: rgba(255,255,255,160); font-size: 18px; padding: 8px; } QPushButton:pressed { color: white; }</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QPushButton" name="volumeBtn">
+                <property name="minimumSize">
+                 <size>
+                  <width>48</width>
+                  <height>48</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>音量</string>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true">QPushButton { background: transparent; border: none; color: rgba(255,255,255,160); font-size: 18px; padding: 8px; } QPushButton:pressed { color: white; }</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+            <item>
+             <layout class="QHBoxLayout" name="progressLayout">
+              <item>
+               <widget class="QLabel" name="curTimeLabel">
+                <property name="minimumSize">
+                 <size>
+                  <width>40</width>
+                  <height>0</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>40</width>
+                  <height>16777215</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>00:00</string>
+                </property>
+                <property name="alignment">
+                 <set>Qt::AlignCenter</set>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true">color: rgba(255,255,255,120); font-size: 11px;</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QSlider" name="progressSlider">
+                <property name="orientation">
+                 <enum>Qt::Horizontal</enum>
+                </property>
+                <property name="maximum">
+                 <number>1000</number>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true">QSlider::groove:horizontal { height: 4px; background: rgba(255,255,255,30); border-radius: 2px; } QSlider::handle:horizontal { background: #31C27C; width: 14px; height: 14px; margin: -5px 0; border-radius: 7px; } QSlider::sub-page:horizontal { background: #31C27C; border-radius: 2px; } QSlider::add-page:horizontal { background: rgba(255,255,255,20); border-radius: 2px; }</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QLabel" name="totalTimeLabel">
+                <property name="minimumSize">
+                 <size>
+                  <width>40</width>
+                  <height>0</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>40</width>
+                  <height>16777215</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>00:00</string>
+                </property>
+                <property name="alignment">
+                 <set>Qt::AlignCenter</set>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true">color: rgba(255,255,255,120); font-size: 11px;</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+           </layout>
+          </item>
+          <!-- 右侧功能按钮 -->
+          <item>
+           <layout class="QVBoxLayout" name="rightLayout">
+            <item>
+             <layout class="QHBoxLayout" name="funcLayout">
+              <item>
+               <widget class="QPushButton" name="modeBtn">
+                <property name="minimumSize">
+                 <size>
+                  <width>44</width>
+                  <height>28</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>深色</string>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true">QPushButton { background: transparent; border: 1px solid rgba(255,255,255,50); border-radius: 4px; color: rgba(255,255,255,120); font-size: 11px; } QPushButton:pressed { border-color: #31C27C; color: #31C27C; }</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QPushButton" name="lyricsBtn">
+                <property name="minimumSize">
+                 <size>
+                  <width>40</width>
+                  <height>40</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>歌词</string>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true">QPushButton { background: transparent; border: none; color: rgba(255,255,255,160); font-size: 18px; padding: 8px; } QPushButton:pressed { color: white; }</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QPushButton" name="eqBtn">
+                <property name="minimumSize">
+                 <size>
+                  <width>40</width>
+                  <height>40</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>均衡</string>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true">QPushButton { background: transparent; border: none; color: rgba(255,255,255,160); font-size: 18px; padding: 8px; } QPushButton:pressed { color: white; }</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QPushButton" name="speedBtn">
+                <property name="minimumSize">
+                 <size>
+                  <width>44</width>
+                  <height>28</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>1.0x</string>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true">QPushButton { background: transparent; border: 1px solid rgba(255,255,255,50); border-radius: 4px; color: rgba(255,255,255,120); font-size: 11px; } QPushButton:pressed { border-color: #31C27C; color: #31C27C; }</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QPushButton" name="sleepBtn">
+                <property name="minimumSize">
+                 <size>
+                  <width>44</width>
+                  <height>28</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>睡眠</string>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true">QPushButton { background: transparent; border: 1px solid rgba(255,255,255,50); border-radius: 4px; color: rgba(255,255,255,120); font-size: 11px; } QPushButton:pressed { border-color: #31C27C; color: #31C27C; }</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QPushButton" name="playlistBtn">
+                <property name="minimumSize">
+                 <size>
+                  <width>48</width>
+                  <height>48</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>列表</string>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true">QPushButton { background: transparent; border: none; color: rgba(255,255,255,160); font-size: 18px; padding: 8px; } QPushButton:pressed { color: white; }</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="settingsPage">
+      <property name="styleSheet">
+       <string notr="true">background: qlineargradient(x1:0,y1:0,x2:0.5,y2:1,stop:0 #0a1628, stop:0.3 #0d2137, stop:0.7 #122a3e, stop:1 #0f2530);</string>
+      </property>
+      <layout class="QVBoxLayout" name="settingsLayout">
+       <property name="spacing">
+        <number>0</number>
+       </property>
+       <property name="leftMargin">
+        <number>40</number>
+       </property>
+       <property name="topMargin">
+        <number>20</number>
+       </property>
+       <property name="rightMargin">
+        <number>40</number>
+       </property>
+       <property name="bottomMargin">
+        <number>20</number>
+       </property>
+       <item>
+        <widget class="QLabel" name="settingsTitleLabel">
+         <property name="text">
+          <string>设置</string>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">color: white; font-size: 22px; font-weight: bold;</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <spacer name="settingsSpacer1">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeType">
+          <enum>QSizePolicy::Fixed</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item>
+        <widget class="QLabel" name="playSectionLabel">
+         <property name="text">
+          <string>播放设置</string>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">color: #31C27C; font-size: 14px; font-weight: bold;</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QWidget" name="settingsContent">
+         <layout class="QVBoxLayout" name="settingsContentLayout">
+          <property name="spacing">
+           <number>8</number>
+          </property>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <spacer name="settingsSpacer2">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+        </spacer>
+       </item>
+      </layout>
+     </widget>
+    </widget>
+   </item>
+   <!-- 底部 Tab 栏 -->
+   <item>
+    <widget class="QWidget" name="tabBarWidget">
+     <property name="minimumSize">
+      <size>
+       <width>0</width>
+       <height>56</height>
+      </size>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>16777215</width>
+       <height>56</height>
+      </size>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">background: rgba(0,0,0,220); border-top: 1px solid rgba(255,255,255,10);</string>
+     </property>
+     <layout class="QHBoxLayout" name="tabBarLayout">
+      <property name="spacing">
+       <number>0</number>
+      </property>
+      <property name="leftMargin">
+       <number>0</number>
+      </property>
+      <property name="topMargin">
+       <number>4</number>
+      </property>
+      <property name="rightMargin">
+       <number>0</number>
+      </property>
+      <property name="bottomMargin">
+       <number>4</number>
+      </property>
+      <item>
+       <widget class="QPushButton" name="tabBtn_0">
+        <property name="minimumSize">
+         <size>
+          <width>80</width>
+          <height>48</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>首页</string>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">QPushButton { background: transparent; border: none; color: rgba(255,255,255,100); font-size: 13px; } QPushButton:pressed { color: #31C27C; }</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="tabBtn_1">
+        <property name="minimumSize">
+         <size>
+          <width>80</width>
+          <height>48</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>歌曲</string>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">QPushButton { background: transparent; border: none; color: rgba(255,255,255,100); font-size: 13px; } QPushButton:pressed { color: #31C27C; }</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="tabBtn_2">
+        <property name="minimumSize">
+         <size>
+          <width>80</width>
+          <height>48</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>收藏</string>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">QPushButton { background: transparent; border: none; color: rgba(255,255,255,100); font-size: 13px; } QPushButton:pressed { color: #31C27C; }</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="tabBtn_3">
+        <property name="minimumSize">
+         <size>
+          <width>80</width>
+          <height>48</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>播放</string>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">QPushButton { background: transparent; border: none; color: rgba(255,255,255,100); font-size: 13px; } QPushButton:pressed { color: #31C27C; }</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="tabBtn_4">
+        <property name="minimumSize">
+         <size>
+          <width>80</width>
+          <height>48</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>设置</string>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">QPushButton { background: transparent; border: none; color: rgba(255,255,255,100); font-size: 13px; } QPushButton:pressed { color: #31C27C; }</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>RotatingCover</class>
+   <extends>QWidget</extends>
+   <header>mainwindow.h</header>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections/>
+</ui>
